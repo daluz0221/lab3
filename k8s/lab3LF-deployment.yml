@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: lab3v-app
-          image: lab3v-app:latest
+          image: daluz21/lab3v-app:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8089

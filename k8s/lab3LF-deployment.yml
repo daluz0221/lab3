@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab3v-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lab3v
+  template:
+    metadata:
+      labels:
+        app: lab3v
+    spec:
+      containers:
+        - name: lab3v-app
+          image: lab3v-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8089
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://mysql:3306/lab3LF"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: MYSQL_ROOT_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lab3v-service
+spec:
+  ports:
+    - port: 8089
+      targetPort: 8089
+  selector:
+    app: lab3v
+  type: LoadBalancer
